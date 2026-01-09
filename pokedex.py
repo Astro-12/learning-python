@@ -32,17 +32,48 @@ def show_power_scores():
 
 
 def search_pokemon():
-    name = input("Enter pokemon name: ").strip().lower()
-    result = pokedex[pokedex["Name"].str.lower() == name.lower()]
-    if result.empty:
+    query = input("Enter pokemon name: ").strip().lower()
+
+    if not query:
+        print("Please enter a name.")
+        return
+    matches = pokedex[pokedex["Name"].str.lower().str.contains(query)]
+    if matches.empty:
         print("❌ Pokemon not found")
     else:
-        print(result[
+        print(matches[
             ["Name", "Type 1", "Type 2",
              "HP", "Attack", "Defense",
              "Sp. Atk", "Sp. Def", "Speed",
              "total_stats", "power_score"]
         ])
+        return
+    
+    print("\n Multiple pokemon found: ")
+    for i in enumerate(matches["Name"].values, start = 1):
+        print(f"{i}. {__name__}")
+
+    choice = input("\nEnter the number to view details (or press Enter to cancel): ").strip()
+
+    if not choice:
+        return
+    
+    
+    choice = int(choice)
+
+    if choice < 1 or choice > len(matches):
+        print("⚠️ Number out of range.")
+        return
+
+    selected = matches.iloc[choice - 1]
+
+    print("\n📊 Pokémon Details:\n")
+    print(selected[
+        ["Name", "Type 1", "Type 2",
+         "HP", "Attack", "Defense",
+         "Sp. Atk", "Sp. Def", "Speed",
+         "total_stats", "power_score"]
+    ])
 
 
 def menu():
@@ -55,6 +86,10 @@ def menu():
         print("5. Exit")
 
         choice = input("Enter your choice (1-5): ").strip()
+
+        if not choice.isdigit():
+            print("Enter a number between 1 and 5")
+            continue
 
         if choice == "1":
             show_top_10()
