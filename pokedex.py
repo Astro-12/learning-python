@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 pokedex = pd.read_csv("pokemon.csv")
 
@@ -49,6 +50,7 @@ def search_pokemon():
         ])
         return
     
+    
     print("\n Multiple pokemon found: ")
     for i in enumerate(matches["Name"].values, start = 1):
         print(f"{i}. {__name__}")
@@ -75,6 +77,41 @@ def search_pokemon():
          "total_stats", "power_score"]
     ])
 
+def plot_avg_stats_by_type():
+    type_stats = pokedex.groupby("Type 1")[stats].mean()
+
+    type_stats.plot(kind="bar", figsize=(12, 6))
+    plt.title("Average Pokémon Stats by Type")
+    plt.ylabel("Average Stat Value")
+    plt.xlabel("Type")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+#Comparing all the stats of all the types seems overwhelming,can be modified so that u can choose any 2 or more pokemons or types to compare the stats for 
+
+def plot_stat_distribution():
+    stat = input("Enter stat (HP, Attack, Defense, Speed): ").strip()
+
+    if stat not in stats:
+        print("⚠️ Invalid stat name.")
+        return
+
+    plt.figure(figsize=(8, 5))
+    plt.hist(pokedex[stat], bins=20)
+    plt.title(f"{stat} Distribution")
+    plt.xlabel(stat)
+    plt.ylabel("Number of Pokémon")
+    plt.show()
+#The graphs can be modified(outline,different colors)basically make the graph more user friendly to understand and again more in-depht selection of what pokemons you wanna compare the stats for
+
+def plot_attack_vs_speed():
+    plt.figure(figsize=(8, 6))
+    plt.scatter(pokedex["Attack"], pokedex["Speed"])
+    plt.title("Attack vs Speed")
+    plt.xlabel("Attack")
+    plt.ylabel("Speed")
+    plt.show()
+#The dot color of speed and attack has to be changed.
 
 def menu():
     while True:
@@ -83,27 +120,37 @@ def menu():
         print("2. Show Average Stats by Type")
         print("3. Show Top 10 Pokémon (by Power Score)")
         print("4. Search Pokémon by Name")
-        print("5. Exit")
+        print("5. Plot Attack vs Speed")
+        print("6. Plot Average Stats by Type")
+        print("7. Plot Stat Distribution")
+        print("8. Exit")
 
-        choice = input("Enter your choice (1-5): ").strip()
+        choice = input("Enter your choice (1-8): ").strip()
 
         if not choice.isdigit():
-            print("Enter a number between 1 and 5")
+            print("⚠️ Enter a number.")
             continue
 
-        if choice == "1":
+        choice = int(choice)
+
+        if choice == 1:
             show_top_10()
-        elif choice == "2":
+        elif choice == 2:
             show_type_means()
-        elif choice == "3":
+        elif choice == 3:
             show_power_scores()
-        elif choice == "4":
+        elif choice == 4:
             search_pokemon()
-        elif choice == "5":
+        elif choice == 5:
+            plot_attack_vs_speed()
+        elif choice == 6:
+            plot_avg_stats_by_type()
+        elif choice == 7:
+            plot_stat_distribution()
+        elif choice == 8:
             print("Goodbye, Trainer! 👋")
             break
         else:
-            print("Invalid choice, Try again.")
-
+            print("⚠️ Invalid choice.")
 
 menu()
