@@ -28,4 +28,22 @@ def best_selling_product(sales):
     product_sales = {}
     for sale in sales:
         category = sale["category"]
-#tbc
+        quantity = sale["quantity"]
+        if category in product_sales:
+            product_sales[category] += quantity
+        else:
+            product_sales[category] = quantity
+    best_selling = max(product_sales, key=product_sales.get)
+    return best_selling
+
+calculate_revenue(sales_data)
+average_sales_per_day(sales_data, 7)
+best_selling_product(sales_data)    
+
+if __name__ == "__main__":
+    revenue = calculate_revenue(sales_data)
+    avg = average_sales_per_day(sales_data, 7)
+    best = best_selling_product(sales_data)
+    print(f"Total revenue: ${revenue:.2f}")
+    print(f"Average sales per day (7 days): ${avg:.2f}")
+    print(f"Best selling category: {best}") 
