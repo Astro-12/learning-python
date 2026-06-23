@@ -17,6 +17,8 @@ store_2 = {
     "milk" : 10,
     "Energy Drink" : 30
 }
+#using dictionary key-valye pairs to store inventory items
+#Set Union (|): By converting the keys of both dictionaries into sets and using the | operator, you create a unique collection of every single item name across both stores without duplicates.
 
 def merge_inventories(store_1, store_2):
     merged_inventory = {
